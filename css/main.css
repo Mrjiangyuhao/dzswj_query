@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+  #centen {
+    margin-left: 34%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  img {
+    display: none;
+    position: absolute;
+  }
+  span {
+    display: block;
+  }
+  #oDiv {
+    height: auto;
+    width: 422px;
+    margin: 20px auto;
+  }
+  .sizeDiv {
+    width: 422px;
+    height: auto;
+    border: 3px solid #ddd;
+    border-radius: 4px;
+  }
+  #uoload {
+    padding: 4px 10px;
+    height: 20px;
+    line-height: 20px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  #uoload input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer;
+  }
+  #bar {
+    width: 420px;
+    height: 250px;
+    background: #f1f1f1;
+    border-radius: 20px;
+    position:absolute;
+    left : 33%;
+    top: 100px
+  }
+  #bar_title {
+    border-radius: 20px 20px 0 0;
+    height: 58px;
+    background: #eaeaea;
+    color: white;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+    line-height: 55px;
+  }
+  #bar #bar_btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 10px;
+    background: ghostwhite;
+    float: right;
+    margin-right: 18px;
+    margin-top: 20px;
+  }
+  #bar progress {
+    margin-top: 50px;
+    margin-left: 100px;
+    display: inline-block;
+    height: 50px;
+    width: 200px;
+    border-radius: 1rem;
+  }
+  /* 谷歌兼容 */
+  /* 表示总长度背景色 */
+  progress::-webkit-progress-bar {
+    background-color: #c5c5c5;
+    border-radius: 1rem;
+  
+  }
+  /* 表示已完成进度背景色 */
+  progress::-webkit-progress-value {
+    background: #86d64e;
+    border-radius: 1rem;
+  }
+  /* -------------------------------- */
+  /* 火狐兼容 */
+  progress::-moz-progress-bar {
+    background-color: #c5c5c5;
+    border-radius: 1rem;
+  
+  }
+  /* 表示已完成进度背景色 */
+  progress::-moz-progress-value {
+    background: #86d64e;
+    border-radius: 1rem;
+  }
+  #bar span {
+    display: inline-block;
+  }

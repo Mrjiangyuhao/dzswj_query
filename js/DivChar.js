@@ -5,8 +5,11 @@ function Distion(time_id, value_ls, type) {
     let imga = document.getElementById("img");
     let tj = document.getElementById("Bt_tj");
     let VFcode;   //储存验证码返回值 obj类型
-    //防止点击多次提交
-    tj.setAttribute("disabled", "disabled");
+    if( type == 'only' ){
+        //防止点击多次提交
+         tj.setAttribute("disabled", "disabled");
+    }
+    
     //创建image对象
     var Image_1 = new Image();
     var img = imga.src;
@@ -14,7 +17,7 @@ function Distion(time_id, value_ls, type) {
     Image_1.onload = function () {
         var basic = getBase64Image(Image_1);
         //识别验证码
-        ajax("POST", url, "username=&password=5D8EB8897E0EEF4281EEDFC3560B1BF7&typeid=3060&timeout=50&softid=1&softkey=b40ffbee5c1cf4e38028c197eb2fc751&image=" + basic, function (data) {
+        ajax("POST", url, "username=pierrea&password=@#&typeid=3060&timeout=60&softid=1&softkey=b40ffbee5c1cf4e38028c197eb2fc751&image=" + basic, function (data) {
             VFcode = JSON.parse(data);    //将JSON字符串转为JSON对象
 
             if (VFcode.Result != null) {
@@ -39,57 +42,10 @@ function Distion(time_id, value_ls, type) {
 
 }
 
-//读xls文件内容(xlsx.full.min.js)
-function xls(obj, rABS, e) {
-    var e = e || window.event;
-    var files = e.target.files;    //获取目标文件
-    var f = files[0];
-    var formTo = '';
-    var persons = [];    //储存获取到的数据
-    var reader = new FileReader();   //H5新api
-
-    reader.onload = function (e) {
-        var e = e || window.event;
-        //readAsBinaryString或者readAsArrayBuffer读取成功后会把数据储存在result
-        var data = e.target.result;
-        if (!rABS) {
-            //如果是readAsArrayBuffer需要转换
-            data = new Uint8Array(data);
-        }
-        var workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
-        //遍历读取
-        for (var first_sheet_name in workbook.Sheets) {
-            //检测自身是否包含特定属性
-            if (workbook.Sheets.hasOwnProperty(first_sheet_name)) {
-                formTo = workbook.Sheets[first_sheet_name]['!ref'];
-                //concat 用于连接两个或者多个数组
-                persons = XLSX.utils.sheet_to_json(workbook.Sheets[first_sheet_name]);
-                console.log(persons)
-                //看下是否有表头，否则过滤数据
-                var headStr = '公司名称';
-                for (var i = 0; i < persons.length; i++) {
-                    if (Object.keys(persons[i]).join(',') !== headStr) {
-                        persons.splice(i, 1);
-                    }
-                }
-            }
-        }
-        SendData(persons)
-    }
-    //将上传的文件转换
-    if (rABS) {
-        //二进制流
-        reader.readAsBinaryString(f);
-    }
-    else {
-        //数组缓冲区
-        reader.readAsArrayBuffer(f);
-    }
-}
-
     
 //重洗数据导出文件内容
 function _write_(value) {
+    
     var sheet = XLSX.utils.aoa_to_sheet(value);
     var wb = XLSX.utils.book_new({ cellStyles: true });      //创建新工作簿
     XLSX.utils.book_append_sheet(wb, sheet, "SheetJS");
@@ -106,4 +62,42 @@ function s2ab(str) {
     }
     return buf;
 }
-console.log(arr_new)
+
+
+function getString(char, value) {
+    var arr;
+    switch (value) {
+        case 1:
+            arr = char.split("=");
+            break;
+        case 2:
+            arr = char.split("data:image/png;base64,");  //去除头部信息
+            break;
+        default:
+            alert('请传选项');
+
+    }
+
+    return arr[1]
+}
+//点击获取验证码
+function refre(obj) {
+    obj.src = '/web-tycx/gzrk/builderCaptcha.do?t=' + new Date().getTime();
+
+}
+
+
+//图片转Base64编码
+function getBase64Image(url) {
+    var canvas = document.createElement("canvas");
+    canvas.width = url.width;
+    canvas.height = url.height;
+
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(url, 0, 0, url.width, url.height);
+    //截取base64 部分数据
+    var ext = url.src.substring(url.src.lastIndexOf(".") + 1).toLowerCase();
+    var dataURL = canvas.toDataURL("image/" + ext);
+    var ls = getString(dataURL, 2)
+    return encodeURIComponent(ls)
+}

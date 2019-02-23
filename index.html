@@ -1,75 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>企业信息查询</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Tool</title>
     <script src="./js/load.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
+  </head>
 
-    <style>
-    *{margin: 0;padding: 0}
-    #centen{margin-left: 34%;border: 1px solid #ddd;border-radius: 4px;display: inline-block}
-    img{display: none;position: absolute}
-    span{display: block}
-    #oDiv{height: auto;width: 422px;margin: 20px auto}
-    .sizeDiv{width: 422px;height: auto;border: 3px solid #ddd;border-radius: 4px}
-    #uoload{   
-            padding: 4px 10px;  
-            height: 20px;  
-            line-height: 20px;  
-            position: relative;  
-            cursor: pointer;  
-            color: #888;  
-            background: #fafafa;  
-            border: 1px solid #ddd;  
-            border-radius: 4px;  
-            overflow: hidden;  
-            display: inline-block; 
-        }
-        
-        #uoload input{
-            position: absolute;  
-            font-size: 100px;  
-            right: 0;  
-            top: 0;  
-            opacity: 0;  
-            filter: alpha(opacity=0);  
-            cursor: pointer 
-        }
-   </style>
-</head>
-
-<body>
+  <body>
     <div id="centen">
-        <span class="h1">批量上传文件:</span>
-        <div id="uoload">
-            <input id="upload_file" type="file" value="">上传Excle文件
-        </div>
-        <input id="upload_tj" type="button" value="提交">
-        <span class="h1">-------------------------------------------------------------</span>
-        <div>
-            <input id="Tx_sr" type="text">
-            <input id="Bt_tj" type="button" value="提交">
-        </div>
-        <div>
-            <img id="img" src="#">
-        </div>
-        <div>
-            <input disabled="disabled" id="test_1" type="button" value="查询界面测试">
-            <input disabled="disabled" id="test_2" type="button" value="获取图片base64值测试">
-        </div>
+      <span class="h1">批量上传文件:</span>
+      <div id="uoload">
+        <input id="upload_file" type="file" value="" />上传Excle文件
+      </div>
+      <span class="h1"
+        >-------------------------------------------------------------</span
+      >
+      <div>
+        <input id="Tx_sr" type="text" />
+        <input id="Bt_tj" type="button" value="提交" />
+      </div>
+      <div>
+        <img id="img" src="#" />
+      </div>
+      <div>
+        <input
+          disabled="disabled"
+          id="test_1"
+          type="button"
+          value="查询界面测试"
+        />
+        <input
+          disabled="disabled"
+          id="test_2"
+          type="button"
+          value="获取图片base64值测试"
+        />
+      </div>
     </div>
     <div id="oDiv"></div>
-<!-- ------------------------js-xls库文件------------------------------------- -->
-    <script src="./dist/shim.min.js"></script>    
+    <!-- ------------------------js-xls库文件------------------------------------- -->
+    <script src="./dist/shim.min.js"></script>
     <script src="./dist/xlsx.full.min.js"></script>
     <script src="./dist/FileSaver.min.js"></script>
-<!-- ------------------------------------------------------------- -->
+    <!-- ------------------------------------------------------------- -->
     <script src="./js/DivChar.js"></script>
     <script src="./js/public.js"></script>
     <script src="./js/ajax.js"></script>
-</body>
-
+    <script src="./js/CrealJsEffect.js"></script>
+  </body>
 </html>
