@@ -2,7 +2,7 @@
 function Distion(time_id, value_ls, type) {
     // 识别验证码接口
     let url = "/aa/create.json";
-    let imga = document.getElementById("img");
+    let imga = document.getElementById("vfcode");
     let tj = document.getElementById("Bt_tj");
     let VFcode;   //储存验证码返回值 obj类型
     if( type == 'only' ){
@@ -17,7 +17,7 @@ function Distion(time_id, value_ls, type) {
     Image_1.onload = function () {
         var basic = getBase64Image(Image_1);
         //识别验证码
-        ajax("POST", url, "username=pierrea&password=@#&typeid=3060&timeout=60&softid=1&softkey=b40ffbee5c1cf4e38028c197eb2fc751&image=" + basic, function (data) {
+        ajax("POST", url, "username=pierrea&password=5D8EB8897E0EEF4281EEDFC3560B1BF7&typeid=3060&timeout=60&softid=1&softkey=b40ffbee5c1cf4e38028c197eb2fc751&image=" + basic, function (data) {
             VFcode = JSON.parse(data);    //将JSON字符串转为JSON对象
 
             if (VFcode.Result != null) {

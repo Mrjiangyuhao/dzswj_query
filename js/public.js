@@ -2,7 +2,7 @@
  * @Author: Pierre
  * @Date: 2019-01-03 19:31:35
  * @LastEditors: Pierre
- * @LastEditTime: 2019-02-15 16:51:19
+ * @LastEditTime: 2019-03-03 23:36:26
  * @Description: 数据处理
  */
 var reset = '成功';   //取值状态
@@ -59,7 +59,7 @@ function xls(obj, rABS, e) {
 
 //单一查询
 function ajax_only(time_id, value_ls, VFcode) {
-    let imga = document.getElementById("img");
+    let imga = document.getElementById("vfcode");
     let oDiv = document.getElementById("oDiv");
     let tj = document.getElementById("Bt_tj");
     let objArr;    //查询结果储存
@@ -96,9 +96,8 @@ function ajax_only(time_id, value_ls, VFcode) {
     })
 }
 //批量查询
-// window.onerror 捕获控制台的错误 
 function ajax_batch(time_id, value_ls, VFcode) {
-    let imga = document.getElementById("img");
+    let imga = document.getElementById("vfcode");
     var batch_objArr;
     var dzswj_gs;
     var dzswj_ds;  
@@ -136,6 +135,7 @@ function ajax_batch(time_id, value_ls, VFcode) {
             reset = '成功';   //流程走完更改状态
             i = i + 1;
             loading_progress(i,Screening.length)  //弹出进度条.注意value是从1开始
+            
         }
 
     })

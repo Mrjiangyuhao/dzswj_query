@@ -1,0 +1,26 @@
+2019/02/09 01:29:09 [emerg] 15430#0: open() "/root/nginx-1.9.9/logs/access.log" failed (2: No such file or directory)
+2019/02/09 04:02:01 [notice] 8775#0: signal process started
+2019/02/09 04:02:11 [notice] 8778#0: signal process started
+2019/02/09 04:03:29 [notice] 8780#0: signal process started
+2019/02/09 04:03:34 [notice] 8783#0: signal process started
+2019/02/09 04:11:11 [notice] 8786#0: signal process started
+2019/02/09 04:11:18 [notice] 8790#0: signal process started
+2019/02/09 04:12:51 [warn] 8792#0: server name "http://www.9youkf.com/" has suspicious symbols in /usr/local/webserver/nginx/conf/nginx.conf:50
+2019/02/09 04:12:51 [notice] 8792#0: signal process started
+2019/02/09 04:13:19 [warn] 8796#0: server name "www.9youkf.com/" has suspicious symbols in /usr/local/webserver/nginx/conf/nginx.conf:50
+2019/02/09 04:13:19 [notice] 8796#0: signal process started
+2019/02/09 04:14:39 [notice] 8800#0: signal process started
+2019/02/09 04:14:45 [notice] 8803#0: signal process started
+2019/02/09 04:18:41 [notice] 8807#0: signal process started
+2019/02/09 04:18:46 [notice] 8810#0: signal process started
+2019/02/09 04:27:08 [emerg] 8813#0: unknown directive "listem" in /usr/local/webserver/nginx/conf/nginx.conf:49
+2019/02/09 04:27:47 [notice] 8816#0: signal process started
+2019/02/09 04:27:52 [notice] 8819#0: signal process started
+2019/02/10 01:23:11 [notice] 9728#0: signal process started
+2019/02/10 01:23:20 [notice] 9732#0: signal process started
+2019/02/10 02:34:37 [notice] 9769#0: signal process started
+2019/02/10 02:34:42 [notice] 9772#0: signal process started
+2019/02/11 08:36:15 [notice] 10951#0: signal process started
+2019/02/11 08:36:25 [notice] 10954#0: signal process started
+2019/02/11 08:41:21 [notice] 10965#0: signal process started
+2019/02/11 08:41:29 [notice] 10968#0: signal process started
