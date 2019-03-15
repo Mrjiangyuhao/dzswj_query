@@ -1,40 +1,45 @@
 * {
     margin: 0;
     padding: 0;
+    
   }
   body{
     background-color:  #ddd;
+    background-image: url(../img/logo.png); 
+    background-repeat: no-repeat;
   }
-  #password_box{width: 100%;height: 100%;background-color: #007cc0;z-index: 1;position: absolute;}
+  h4{font-family: cursive}
+  span {display: block;}
+  .style_dy{border:1px solid #9fa19e;width:390px;border-radius: 10px;padding-top: 5px;height: 80px;margin-top: 15px}
+
+  #password_box{width: 1324px;height: 800px;background-color: #007cc0;z-index: 1;position: absolute;}
   #password_box img{position: absolute; top : 35%;left: 40%;}  
   #password_box #btn_value{position: absolute;display: block;width: 200px;height: 25px;top : 47%;left: 44%;}
   #password_box #btn_password{position: absolute;display: block;width: 200px;height: 25px;top : 55%;left: 44%;}
   #centen {
     margin-left: 34%;
-    margin-top: 10%;
+    margin-top: 5%;
     border: 2px solid #9fa19e;
-    border-radius: 4px;
+    border-radius: 15px;
     display: inline-block;
-
+    width: 400px;
+    height: 700px;
+    padding-left: 10px;
+    background-color: white;
   }
-
+  #uoload{margin-top: 10px;margin-left: 30%}
   #vfcode {
     display: none;
     position: absolute;
   }
-  span {
-    display: block;
-  }
-  #oDiv {
-    height: auto;
-    width: 422px;
-    margin: 20px auto;
-  }
+  #az{height: 450px}
+  #oDiv {border:1px solid #9fa19e;width:380px;border-radius: 10px;padding-top: 5px;height: 350px;margin-top: 15px;margin-left: 5px}
   .sizeDiv {
-    width: 422px;
+    width: 380px;
     height: auto;
     border: 3px solid #ddd;
     border-radius: 4px;
+    margin-top: 10px;
   }
   #uoload {
     padding: 4px 10px;
@@ -66,7 +71,8 @@
     border-radius: 20px;
     position:absolute;
     left : 33%;
-    top: 100px
+    top: 175px;
+    z-index: 1;
   }
   #bar_title {
     border-radius: 20px 20px 0 0;
@@ -75,8 +81,10 @@
     color: white;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
       sans-serif;
-    line-height: 55px;
+    line-height: 20px;
+  
   }
+  #bar_title p{display: inline-block;position: absolute;top : 25px;left: 20px;color: #86d64e}
   #bar #bar_btn {
     width: 20px;
     height: 20px;
@@ -86,35 +94,35 @@
     float: right;
     margin-right: 18px;
     margin-top: 20px;
-  }
-  #bar progress {
-    margin-top: 50px;
-    margin-left: 100px;
-    display: inline-block;
-    height: 50px;
-    width: 200px;
-    border-radius: 1rem;
-  }
-  /* 谷歌兼容 */
-  /* 表示总长度背景色 */
-  progress::-webkit-progress-bar {
-    background-color: #c5c5c5;
-    border-radius: 1rem;
   
   }
+  #bar progress {
+    margin-top: 100px;
+    margin-left: 90px;
+    display: inline-block;
+    height: 50px;
+    width: 230px;
+    border-radius: 15px;
+  }
+  #bar #loadding{color: #86d64e}
+  /* 谷歌兼容 */
+  /* 表示总长度背景色 */
+  #bar progress::-webkit-progress-bar {
+    background-color: #c5c5c5;  
+  }
   /* 表示已完成进度背景色 */
-  progress::-webkit-progress-value {
+  #bar progress::-webkit-progress-value {
     background: #86d64e;
-    border-radius: 1rem;
   }
   /* -------------------------------- */
   /* 火狐兼容 */
+  /* 表示已完成进度背景色 */
   progress::-moz-progress-bar {
-    background-color: #c5c5c5;
+    /* background-color: #c5c5c5; */
     border-radius: 1rem;
   
   }
-  /* 表示已完成进度背景色 */
+  /* 表示总长度背景色 */
   progress::-moz-progress-value {
     background: #86d64e;
     border-radius: 1rem;

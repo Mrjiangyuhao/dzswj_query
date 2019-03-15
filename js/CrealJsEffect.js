@@ -2,7 +2,7 @@
  * @Author: Pierre
  * @Date: 2019-02-09 16:10:43
  * @LastEditors: Pierre
- * @LastEditTime: 2019-03-03 22:10:54
+ * @LastEditTime: 2019-03-14 23:34:32
  * @Description:  Progress bar
  */
 var lan = 0;
@@ -13,11 +13,11 @@ function loading_progress(smallNumber,maxNumber){
           //动态生成节点
           var oDiv_bar = document.createElement("div");
           oDiv_bar.setAttribute('id','bar');
-          oDiv_bar.innerHTML = `<div id='bar_title'>&nbsp&nbsploadding... \
+          oDiv_bar.innerHTML = `<div id='bar_title'><p>loadding... </p>\
           <progress value='${smallNumber}'  max='${maxNumber}'></progress><span id='loadding'>0%</span>`;
           document.body.appendChild(oDiv_bar);
 
-      // loading_progress(smallNumber,maxNumber)   //测试
+     //  loading_progress(smallNumber,maxNumber)   //测试
      }else{
           var loadding = document.getElementById("loadding");
           var bar_progress = bar.getElementsByTagName("progress")[0];
@@ -38,4 +38,4 @@ function unload_progress(){
      unload_bar.style.cssText = 'display: none';
      lan = 0;
 }
- //loading_progress(500,500)  //测试
+//  loading_progress(15,500)  //测试

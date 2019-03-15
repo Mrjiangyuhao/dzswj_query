@@ -2,13 +2,10 @@
  * @Author: Pierre
  * @Date: 2019-01-03 19:31:35
  * @LastEditors: Pierre
- * @LastEditTime: 2019-03-03 23:36:26
+ * @LastEditTime: 2019-03-14 22:05:36
  * @Description: 数据处理
  */
-var reset = '成功';   //取值状态
-var i = 0;    //自增变量,主要用来取数组的值
-var arr_new = [];  //储存返回查询到的值。注意如果是局部变量push的时候会覆盖原有的值
-var Screening = [];  //存储解析Excle里面的原始值
+
 
 //读xls文件内容(xlsx.full.min.js)
 function xls(obj, rABS, e) {
@@ -57,118 +54,81 @@ function xls(obj, rABS, e) {
     }
 }
 
+//重洗数据导出文件内容
+function _write_(value) {
+    var sheet = XLSX.utils.aoa_to_sheet(value);
+    var wb = XLSX.utils.book_new({ cellStyles: true }); //创建新工作簿
+    XLSX.utils.book_append_sheet(wb, sheet, "SheetJS");
+    var wbout = XLSX.write(wb, { type: "binary", bookType: "xlsx" }); //渲染
+    saveAs(
+      new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
+      Date.now() + ".xlsx"
+    ); //保存下载
+  }
+  // -------------------下面的代码借用github里面的项目--------------------------------
+  // 把 string 转为 ArrayBuffer
+  function s2ab(str) {
+    var buf = new ArrayBuffer(str.length);
+    var _view = new Uint8Array(buf);
+    for (var i = 0, len = str.length; i < len; i++) {
+      _view[i] = str.charCodeAt(i) & 0xff;
+    }
+    return buf;
+  }
+  
+  function getString(char, value) {
+    var arr;
+    switch (value) {
+      case 1:
+        arr = char.split("=");
+        break;
+      case 2:
+        arr = char.split("data:image/png;base64,"); //去除头部信息
+        break;
+      default:
+        alert("请传选项");
+    }
+  
+    return arr[1];
+  }
+  //点击获取验证码
+  function refre(obj) {
+    obj.src = "/web-tycx/gzrk/builderCaptcha.do?t=" + new Date().getTime();
+  }
+  
+  //图片转Base64编码
+  function getBase64Image(url) {
+    var canvas = document.createElement("canvas");
+    canvas.width = url.width;
+    canvas.height = url.height;
+  
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(url, 0, 0, url.width, url.height);
+    //截取base64 部分数据
+    var ext = url.src.substring(url.src.lastIndexOf(".") + 1).toLowerCase();
+    var dataURL = canvas.toDataURL("image/" + ext);
+    var ls = getString(dataURL, 2);
+  
+    // return encodeURIComponent(ls)    //该加密支持更广义的符号加密
+    return encodeURI(ls); //斐斐打码只支持该加密
+  }
+  
+  //密钥MD5加密
+  function CalcSign(pd_id, pd_key, timestamp) {
+    var md5_chk = hex_md5(timestamp + pd_key);
+    var sign_chk = hex_md5(pd_id + timestamp + md5_chk);
+    return sign_chk;
+  }
+
+
+
 //单一查询
-function ajax_only(time_id, value_ls, VFcode) {
-    let imga = document.getElementById("vfcode");
-    let oDiv = document.getElementById("oDiv");
-    let tj = document.getElementById("Bt_tj");
-    let objArr;    //查询结果储存
-    let dzswj_gs_arr = new Array();   //国税信息储存
-    let dzswj_ds_arr = new Array();   //地税信息储存
-    ajax("GET", "/web-tycx/gzrk/tycxGzrkQuery.do", "t=" + time_id + "&bw=" + encodeURIComponent("{'taxML':{'head':{'gid':'311085A116185FEFE053C2000A0A5B63','sid':'gzcx.swdjxxcx','tid':'+','version':''},'body':{'nsrsbh':'','nsrmc':'" + value_ls + "','captcha':'" + VFcode.Result + "'}}}"), function (data) {
-
-        var inf = JSON.parse(data)
-        objArr = inf.taxML.body.taxML.swdjxxList.swdjxx;
-
-        //检查是否有企业信息
-        if (objArr.length == 0) {
-            alert("没有该企业信息，请检查！")
-            refre(imga)
-            tj.removeAttribute("disabled");
-            return
-        }
-        //将国地分别储存
-        var dzswj_gs = objArr[0];
-        var dzswj_ds = objArr[1];
-        for (var p in dzswj_gs) {
-            dzswj_gs_arr.push(dzswj_gs[p]);//对象key值如果是变量可以这样写，如果key值是双引号括起来就用点的方式
-        }
-
-        oDiv.innerHTML = ` <div class="sizeDiv">名称：${dzswj_gs_arr[3]}</div> \
-        <div class="sizeDiv">税号：${dzswj_gs_arr[4]}</div> \
-        <div class="sizeDiv">电话：${dzswj_gs_arr[2]}</div> \  
-        <div class="sizeDiv">企业状态：${dzswj_gs_arr[5]}</div> \  
-        <div class="sizeDiv">地址：${dzswj_gs_arr[6]}</div> \  
-        <div class="sizeDiv">所属税局：${dzswj_gs_arr[8]}</div> \  
-        `;
-        refre(imga)
-        tj.removeAttribute("disabled");
-    })
+function ajax_only(time_id, value_ls, result,success) {
+    ajax("GET", "/web-tycx/gzrk/tycxGzrkQuery.do", "t=" + time_id + "&bw=" + encodeURIComponent("{'taxML':{'head':{'gid':'311085A116185FEFE053C2000A0A5B63','sid':'gzcx.swdjxxcx','tid':'+','version':''},'body':{'nsrsbh':'','nsrmc':'" + value_ls + "','captcha':'" + result["result"] + "'}}}"),success)
 }
 //批量查询
-function ajax_batch(time_id, value_ls, VFcode) {
-    let imga = document.getElementById("vfcode");
-    var batch_objArr;
-    var dzswj_gs;
-    var dzswj_ds;  
-    ajax("GET", "/web-tycx/gzrk/tycxGzrkQuery.do", "t=" + time_id + "&bw=" + encodeURIComponent("{'taxML':{'head':{'gid':'311085A116185FEFE053C2000A0A5B63','sid':'gzcx.swdjxxcx','tid':'+','version':''},'body':{'nsrsbh':'','nsrmc':'" + value_ls + "','captcha':'" + VFcode.Result + "'}}}"), function (data) {
-
-        var inf = JSON.parse(data)
-        //检查返回状态码
-        if( inf.code ){
-            alert(inf.code + inf.message +'将跳过该条处理下一条');
-            arr_new.push([inf.message])
-            refre(imga)
-            reset = '成功';   //主要参数，流程走完更改状态
-            i = i + 1;        //主要参数，控制下一次循环
-            loading_progress(i,Screening.length) 
-            return
-        }else{
-            batch_objArr = inf.taxML.body.taxML.swdjxxList.swdjxx;
-        }
-        
-        //检查是否有企业信息
-        if (batch_objArr.length == 0) {
-            arr_new.push([dzswj_gs.nsrmc,'没有该企业信息，请检查'])
-            // arr_new[`${dzswj_gs.nsrmc}`] = '没有该企业信息，请检查';
-            refre(imga)
-            reset = '成功';   //主要参数，流程走完更改状态
-            i = i + 1;        //主要参数，控制下一次循环
-            loading_progress(i,Screening.length) 
-            return
-        } else {
-            //将国地分别储存
-            dzswj_gs = batch_objArr[0];
-            dzswj_ds = batch_objArr[1];
-            arr_new.push([dzswj_gs.nsrmc,dzswj_gs.nsrsbh, dzswj_gs.nsrztmc,dzswj_gs.lxdh])//获得的结果
-            refre(imga)
-            reset = '成功';   //流程走完更改状态
-            i = i + 1;
-            loading_progress(i,Screening.length)  //弹出进度条.注意value是从1开始
-            
-        }
-
-    })
+function ajax_batch(time_id, value_ls, result,success) {
+   ajax("GET", "/web-tycx/gzrk/tycxGzrkQuery.do", "t=" + time_id + "&bw=" + encodeURIComponent("{'taxML':{'head':{'gid':'311085A116185FEFE053C2000A0A5B63','sid':'gzcx.swdjxxcx','tid':'+','version':''},'body':{'nsrsbh':'','nsrmc':'" + value_ls + "','captcha':'" + result["result"] + "'}}}"),success)
 }
-//中间层
-//控制数据的发送
-function SendData(persons) {
-    var oImg = document.getElementsByTagName('img')[0];
-    var url = oImg.src;
-    var time_id = getString(url, 1)
 
-    for (var arr = 0; arr < persons.length; arr++) {
-        for (var varName in persons[arr]) {
-            Screening.push(persons[arr][varName])
-        }
-    }
-    loading_progress(i,Screening.length)
-    //等待返回值后在循环处理内容
-    var a = setInterval(() => {
-        if (i < Screening.length) {
-            if (reset == '成功') {
-                reset = '不成功';   //阻塞定时器执行，等待完成再进入
-                Distion(time_id, Screening[i], 'batch')
-            }
-        } else {
-            _write_(arr_new)    //组合数据导出Excle
-            clearInterval(a)    //停止定时器
-            arr_new = []    //删除筛选出来储存数据
-            //清空储存的key值 
-            Screening = [];
-            i = 0;
-        }
-    }, 4000);
-
-}
 

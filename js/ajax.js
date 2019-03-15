@@ -18,13 +18,13 @@ function ajax(http,url,data,caa){
 		oHttpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded"); //设置http请求头部必须在调用的后面
 		oHttpRequest.send(data);
 	}else{
-		// if(data){
+		if(data){
 			url = url+"?"+data+"&"+dta.getTime();
 			// url = url+"?"+data;
-		// }else{
-		// 	alert("没有获取接口的条件值！请检查！");
-		// 	return;
-		// }
+		}else{
+			alert("没有获取接口的条件值！请检查！");
+			return;
+		}
 		oHttpRequest.open(http,url,true);
 	 	oHttpRequest.send();	
 	}
@@ -44,5 +44,5 @@ function ajax(http,url,data,caa){
 		
 	}
 	
-	
 }
+

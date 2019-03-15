@@ -1,103 +1,204 @@
+let reset = '成功';   //取值状态
+let i = 0;    //自增变量,主要用来取数组的值
+let arr_new = [];  //储存返回查询到的值。注意如果是局部变量push的时候会覆盖原有的值
+let Screening = [];  //存储解析Excle里面的原始值
+
+
+//第三方接口参数
+function User() {
+  return {
+    pd_id: 110269, // 用户中心页可以查询到pd信息
+    pd_key: "zkt1MicwfZMNpoWHcYlXrdjUsjwnRF0J",
+    app_id: 1000001, // 开发者分成用的账号，在开发者中心可以查询到
+    app_key: "123456",
+    // 具体类型可以查看官方网站的价格页选择具体的类型，不清楚类型的，可以咨询客服
+    pred_type: 30600
+  };
+}
+
 //发送完整参数去后台取信息
 function Distion(time_id, value_ls, type) {
-    // 识别验证码接口
-    let url = "/aa/create.json";
-    let imga = document.getElementById("vfcode");
-    let tj = document.getElementById("Bt_tj");
-    let VFcode;   //储存验证码返回值 obj类型
-    if( type == 'only' ){
-        //防止点击多次提交
-         tj.setAttribute("disabled", "disabled");
-    }
-    
-    //创建image对象
-    var Image_1 = new Image();
-    var img = imga.src;
-    //图片加载完后执行. 注意：必须在src前面
-    Image_1.onload = function () {
-        var basic = getBase64Image(Image_1);
-        //识别验证码
-        ajax("POST", url, "username=pierrea&password=5D8EB8897E0EEF4281EEDFC3560B1BF7&typeid=3060&timeout=60&softid=1&softkey=b40ffbee5c1cf4e38028c197eb2fc751&image=" + basic, function (data) {
-            VFcode = JSON.parse(data);    //将JSON字符串转为JSON对象
+  let url = "/api/capreg";
+  let imga = document.getElementById("vfcode");
+  let tj = document.getElementById("Bt_tj");
+  let oDiv = document.getElementById("oDiv");
+  //单独查询变量
+  let objArr; //查询结果储存
+  let dzswj_gs_arr = new Array(); //国税信息储存
+  let dzswj_ds_arr = new Array(); //地税信息储存
+  //批量查询变量
+  let batch_objArr;
+  let dzswj_gs;
+  let dzswj_ds;  
 
-            if (VFcode.Result != null) {
-                switch (type) {
-                    //单一查询
-                    case 'only':
-                        ajax_only(time_id, value_ls, VFcode)     //图片ID   名称   验证码
-                        break;
-                    //批量查询
-                    case 'batch':
-                        ajax_batch(time_id, value_ls, VFcode)
-                        break;
-                }
-            } else {
-                //识别报错提示
-                alert(VFcode.Error)
+  if (type == "only") {
+    //防止点击多次提交
+    tj.setAttribute("disabled", "disabled");
+  }
+
+  //创建image对象
+  var Image_1 = new Image();
+  var img = imga.src;
+  //图片加载完后执行. 注意：必须在src前面
+  Image_1.onload = function() {
+    var basic = getBase64Image(Image_1);
+    var pd = User();
+    var pd_id = pd.pd_id;
+    var pd_key = pd.pd_key;
+    var app_id = pd.app_id;
+    var app_key = pd.app_key;
+    var pred_type = pd.pred_type;
+   
+    Predict(basic, app_id, app_key, pd_id, pd_key, pred_type, function(ret_code,pred_data,result) {
+      if (ret_code == 0) {
+        switch (type) {
+          //单一查询
+          case "only":
+          //图片ID   名称   验证码    回调函数
+            ajax_only(time_id, value_ls, result, function(data) {
+              var inf = JSON.parse(data);
+           
+              if (inf.code === "90") {
+                alert("code:90，验证码错误啦");
+                refre(imga);
+                //识别的结果如果与预期不符，可以调用这个接口将预期不符的订单退款
+                //退款仅在正常识别出结果后，无法通过网站验证的情况，请勿非法或者滥用，否则可能进行封号处理
+                Justice(pd_id, pd_key, rsp_data.RequestId, function(jret_code) {
+                   alert("退款结果: " + jret_code);
+                });
+                return 
+              }
+
+              objArr = inf.taxML.body.taxML.swdjxxList.swdjxx;
+
+              //检查是否有企业信息
+              if (batch_objArr == "" || batch_objArr == null || batch_objArr == undefined) {
+                alert(`没有查询到${value_ls}的企业信息，请去公示网核实！`);
+                refre(imga);
                 tj.removeAttribute("disabled");
+                return 
+              }
+                
+              //将国地分别储存
+              var dzswj_gs = objArr[0];
+              var dzswj_ds = objArr[1];
+              for (var p in dzswj_gs) {
+                dzswj_gs_arr.push(dzswj_gs[p]); //对象key值如果是变量可以这样写，如果key值是双引号括起来就用点的方式
+              }
+
+              oDiv.innerHTML = ` <div class="sizeDiv">名称：${
+                dzswj_gs_arr[3]
+              }</div> \
+                          <div class="sizeDiv">税号：${dzswj_gs_arr[4]}</div> \
+                          <div class="sizeDiv">电话：${
+                            dzswj_gs_arr[2]
+                          }</div> \  
+                           <div class="sizeDiv">企业状态：${
+                             dzswj_gs_arr[5]
+                           }</div> \  
+                           <div class="sizeDiv">地址：${
+                             dzswj_gs_arr[6]
+                           }</div> \  
+                          <div class="sizeDiv">所属税局：${
+                            dzswj_gs_arr[8]
+                          }</div> \  
+                          `;
+              refre(imga);
+              tj.removeAttribute("disabled");
+            }); 
+            break;
+          //批量查询
+          case "batch":
+            ajax_batch(time_id, value_ls, result,function(data){
+                var inf = JSON.parse(data)
+                
+                 if( inf.code === '90' ){
+                    Justice(pd_id, pd_key, rsp_data.RequestId, function(jret_code) {
+                       console.log("退款结果: " + jret_code);
+                    });
+                    refre(imga);
+                    reset = '成功';   //流程走完更改状态
+                    i = i + 1;
+                    arr_new.push([value_ls,'识别验证码错误，重新操作'])
+                    loading_progress(i,Screening.length)  //弹出进度条.注意value是从1开始
+                    return 
+                 }
+      
+              //检查返回状态码
+            //     if( inf.code ){
+            //         alert(inf.code + inf.message +'将跳过该条处理下一条');
+            //         arr_new.push([inf.message])
+            //         refre(imga)
+            //         reset = '成功';   //主要参数，流程走完更改状态
+            //       i = i + 1;        //主要参数，控制下一次循环
+            //       loading_progress(i,Screening.length) 
+            //       return 
+            //   }else{
+                  batch_objArr = inf.taxML.body.taxML.swdjxxList.swdjxx;
+            //   }
+            
+              //检查是否有企业信息
+              if (batch_objArr == "" || batch_objArr == null || batch_objArr == undefined) {
+                  arr_new.push([value_ls,'没有该企业信息，请检查'])
+                  refre(imga)
+                  loading_progress(i,Screening.length) 
+                  reset = '成功';   //主要参数，流程走完更改状态
+                  i = i + 1;        //主要参数，控制下一次循环
+                  loading_progress(i,Screening.length)  //弹出进度条.注意value是从1开始
+                  return 
+              } else {
+                  //将国地分别储存
+                  dzswj_gs = batch_objArr[0];
+                  dzswj_ds = batch_objArr[1];
+                  arr_new.push([dzswj_gs.nsrmc,dzswj_gs.nsrsbh, dzswj_gs.nsrztmc,dzswj_gs.lxdh])//获得的结果
+                  refre(imga)
+                  reset = '成功';   //流程走完更改状态
+                  i = i + 1;
+                  loading_progress(i,Screening.length)  //弹出进度条.注意value是从1开始
+              }
+            });
+            break;
+        }
+      } else {
+        //识别报错提示
+        alert(ret_code);
+        tj.removeAttribute("disabled");
+      }
+     
+    });
+  };
+  Image_1.src = img;
+}
+
+//中间层
+//控制数据的发送
+function SendData(persons) {
+    var oImg = document.getElementsByTagName('img')[0];
+    var url = oImg.src;
+    var time_id = getString(url, 1)
+
+    for (var arr = 0; arr < persons.length; arr++) {
+        for (var varName in persons[arr]) {
+            Screening.push(persons[arr][varName])
+        }
+    }
+    loading_progress(i,Screening.length)
+    //等待返回值后在循环处理内容
+    var a = setInterval(() => {
+        if (i < Screening.length) {
+            if (reset == '成功') {
+                reset = '不成功';   //阻塞定时器执行，等待完成再进入
+                Distion(time_id, Screening[i], 'batch')
             }
-        })
-    }
-    Image_1.src = img;
+        } else {
+            _write_(arr_new)    //组合数据导出Excle
+            clearInterval(a)    //停止定时器
+            arr_new = []    //删除筛选出来储存数据
+            //清空储存的key值 
+            Screening = [];
+            i = 0;
+        }
+    }, 3000);
 
 }
 
-    
-//重洗数据导出文件内容
-function _write_(value) {
-    
-    var sheet = XLSX.utils.aoa_to_sheet(value);
-    var wb = XLSX.utils.book_new({ cellStyles: true });      //创建新工作簿
-    XLSX.utils.book_append_sheet(wb, sheet, "SheetJS");
-    var wbout = XLSX.write(wb, { type: "binary", bookType: "xlsx" });    //渲染
-    saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), Date.now() + ".xlsx");   //保存下载
-}
-// -------------------下面的代码借用github里面的项目--------------------------------
-// 把 string 转为 ArrayBuffer
-function s2ab(str) {
-    var buf = new ArrayBuffer(str.length);
-    var _view = new Uint8Array(buf);
-    for (var i = 0, len = str.length; i < len; i++) {
-        _view[i] = str.charCodeAt(i) & 0xFF;
-    }
-    return buf;
-}
-
-
-function getString(char, value) {
-    var arr;
-    switch (value) {
-        case 1:
-            arr = char.split("=");
-            break;
-        case 2:
-            arr = char.split("data:image/png;base64,");  //去除头部信息
-            break;
-        default:
-            alert('请传选项');
-
-    }
-
-    return arr[1]
-}
-//点击获取验证码
-function refre(obj) {
-    obj.src = '/web-tycx/gzrk/builderCaptcha.do?t=' + new Date().getTime();
-
-}
-
-
-//图片转Base64编码
-function getBase64Image(url) {
-    var canvas = document.createElement("canvas");
-    canvas.width = url.width;
-    canvas.height = url.height;
-
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(url, 0, 0, url.width, url.height);
-    //截取base64 部分数据
-    var ext = url.src.substring(url.src.lastIndexOf(".") + 1).toLowerCase();
-    var dataURL = canvas.toDataURL("image/" + ext);
-    var ls = getString(dataURL, 2)
-    return encodeURIComponent(ls)
-}

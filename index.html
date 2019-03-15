@@ -12,26 +12,27 @@
   <body>
     <div id="password_box"><img id="logo" src="img/logo.png"><input id="btn_value" type="password" ></input> <input id ="btn_password" type="button" value="验证密码"></div>
     <div id="centen">
-      <span class="h1">批量上传文件:</span>
-      <div id="uoload">
-        <input id="upload_file" type="file" value="" />上传Excle文件
+     <div class="style_dy" >
+        <h4 >批量查询：</h4>
+        <div id="uoload">
+          <input id="upload_file" type="file" value="" />上传Excle文件
+        </div>
+     </div>
+    
+      <div id="az" class="style_dy">
+        <h4>单一查询：</h4>
+        <div style="margin-top: 10px;margin-left: 15%">
+            公司名称：<input id="Tx_sr" type="text" />
+            <input id="Bt_tj" type="button" value="提交" />
+        </div>
+        <div id="oDiv"><h4>结果显示：</h4></div>
       </div>
-      <span class="h1"
-        >-------------------------------------------------------------</span
-      >
-      <div>
-        <input id="Tx_sr" type="text" />
-        <input id="Bt_tj" type="button" value="提交" />
-      </div>
+     
       <div>
         <img id="vfcode" src="#" />
       </div>
-      <div>
-        <input disabled="disabled" id="test_1" type="button" value="查询界面测试" />
-        <input disabled="disabled" id="test_2" type="button" value="获取图片base64值测试"/>
-      </div>
     </div>
-    <div id="oDiv"></div>
+   
     <!-- ------------------------js-xls库文件------------------------------------- -->
     <script src="./dist/shim.min.js"></script>
     <script src="./dist/xlsx.full.min.js"></script>
@@ -41,5 +42,7 @@
     <script src="./js/public.js"></script>
     <script src="./js/ajax.js"></script>
     <script src="./js/CrealJsEffect.js"></script>
+    <script src="./dist/fateadm.js"></script>
+    <script src="./dist/crypto.js"></script>
   </body>
 </html>
