@@ -1,3 +1,10 @@
+/*
+ * @Author: Pierre
+ * @LastEditors: Pierre
+ * @Description: 逻辑处理层
+ * @Date: 2019-01-03 19:31:35
+ * @LastEditTime: 2019-03-17 13:32:48
+ */
 let reset = '成功';   //取值状态
 let i = 0;    //自增变量,主要用来取数组的值
 let arr_new = [];  //储存返回查询到的值。注意如果是局部变量push的时候会覆盖原有的值
@@ -9,8 +16,8 @@ function User() {
   return {
     pd_id: 110269, // 用户中心页可以查询到pd信息
     pd_key: "zkt1MicwfZMNpoWHcYlXrdjUsjwnRF0J",
-    app_id: 1000001, // 开发者分成用的账号，在开发者中心可以查询到
-    app_key: "123456",
+    app_id: 310269, // 开发者分成用的账号，在开发者中心可以查询到
+    app_key: "zD9HYH3Beh3ltphn23Z1hsuJaiScGvlK",
     // 具体类型可以查看官方网站的价格页选择具体的类型，不清楚类型的，可以咨询客服
     pred_type: 30600
   };
@@ -54,12 +61,12 @@ function Distion(time_id, value_ls, type) {
         switch (type) {
           //单一查询
           case "only":
-          //图片ID   名称   验证码    回调函数
-            ajax_only(time_id, value_ls, result, function(data) {
+            //图片ID   名称   验证码    回调函数
+            ajax_only(time_id, value_ls,result, function(data) {
               var inf = JSON.parse(data);
            
               if (inf.code === "90") {
-                alert("code:90，验证码错误啦");
+                alert("code:90，验证码错误");
                 refre(imga);
                 //识别的结果如果与预期不符，可以调用这个接口将预期不符的订单退款
                 //退款仅在正常识别出结果后，无法通过网站验证的情况，请勿非法或者滥用，否则可能进行封号处理
@@ -105,7 +112,7 @@ function Distion(time_id, value_ls, type) {
                           `;
               refre(imga);
               tj.removeAttribute("disabled");
-            }); 
+            });  
             break;
           //批量查询
           case "batch":
@@ -123,20 +130,9 @@ function Distion(time_id, value_ls, type) {
                     loading_progress(i,Screening.length)  //弹出进度条.注意value是从1开始
                     return 
                  }
-      
-              //检查返回状态码
-            //     if( inf.code ){
-            //         alert(inf.code + inf.message +'将跳过该条处理下一条');
-            //         arr_new.push([inf.message])
-            //         refre(imga)
-            //         reset = '成功';   //主要参数，流程走完更改状态
-            //       i = i + 1;        //主要参数，控制下一次循环
-            //       loading_progress(i,Screening.length) 
-            //       return 
-            //   }else{
+    
                   batch_objArr = inf.taxML.body.taxML.swdjxxList.swdjxx;
-            //   }
-            
+
               //检查是否有企业信息
               if (batch_objArr == "" || batch_objArr == null || batch_objArr == undefined) {
                   arr_new.push([value_ls,'没有该企业信息，请检查'])
@@ -193,12 +189,25 @@ function SendData(persons) {
         } else {
             _write_(arr_new)    //组合数据导出Excle
             clearInterval(a)    //停止定时器
-            arr_new = []    //删除筛选出来储存数据
+            arr_new = [];    //删除筛选出来储存数据
             //清空储存的key值 
             Screening = [];
             i = 0;
         }
-    }, 3000);
+    }, 2000);
 
+}
+//出现异常后点击强制导出
+function export_erre(){
+  if(arr_new.length === 0  ){
+    alert("没有数据导出，请上传数据")
+  }else{
+    _write_(arr_new)
+    arr_new = [];    //删除筛选出来储存数据
+    //清空储存的key值 
+    Screening = [];
+    i = 0;
+  }
+ 
 }
 

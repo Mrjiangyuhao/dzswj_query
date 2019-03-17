@@ -2,10 +2,23 @@
  * @Author: Pierre
  * @Date: 2019-01-03 19:31:35
  * @LastEditors: Pierre
- * @LastEditTime: 2019-03-14 22:05:36
- * @Description: 数据处理
+ * @LastEditTime: 2019-03-17 13:33:52
+ * @Description: 功能模块
  */
-
+/**
+ *  未解决：
+ *      1、优化不能超过100条数据的问题。 
+ *            思路：先暂时添加一个二位数组，命名三个不同名字的二维数组，每个二维数组为100条记录。
+ *                 然后实时判断  Arr[0][0]  是否长度99-100了，如果是切换Arr[0][1]储存。  
+ *                存值得处理完后，解决导出Excle。传值去_write_ 可以传三个值，然后判断，如果后面两个值有数就添加值去表
+ *      2、添加用户和密码框，让用户登录自己账户充值进行识别
+ *  下次用try {
+          //...
+      } catch(e) {
+           // ...
+      }
+    来捕获异常处理
+ */
 
 //读xls文件内容(xlsx.full.min.js)
 function xls(obj, rABS, e) {
@@ -123,7 +136,7 @@ function _write_(value) {
 
 
 //单一查询
-function ajax_only(time_id, value_ls, result,success) {
+function ajax_only(time_id, value_ls,result,success) {
     ajax("GET", "/web-tycx/gzrk/tycxGzrkQuery.do", "t=" + time_id + "&bw=" + encodeURIComponent("{'taxML':{'head':{'gid':'311085A116185FEFE053C2000A0A5B63','sid':'gzcx.swdjxxcx','tid':'+','version':''},'body':{'nsrsbh':'','nsrmc':'" + value_ls + "','captcha':'" + result["result"] + "'}}}"),success)
 }
 //批量查询
